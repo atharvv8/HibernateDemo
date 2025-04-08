@@ -25,7 +25,7 @@ public class Main {
         Session session = sf.openSession();
 
         Transaction transaction = session.beginTransaction();
-//        session.save(s1);  It is depricated now. so we use session.persist()
+//        session.save(s1);  It is deprecated now. so we use session.persist()
         session.persist(s1);
         transaction.commit();
         session.close();
@@ -67,7 +67,7 @@ public class Main {
         Session session = sf.openSession();
 
         Transaction transaction = session.beginTransaction(); // Since updating is a transaction we need to use transaction and commit
-        session.merge(s3); // If data is present, it will update it.. if data is not present then it will just insert it in table
+        session.merge(s3); // If data is present, it will update it. if data is not present then it will just insert it in table
         transaction.commit();
 
         session.close();
@@ -92,7 +92,33 @@ public class Main {
         s4 = session.get(Student.class, 11);
         Transaction transaction = session.beginTransaction();
 
-        session.remove(s4); // If data is present, it will update it.. if data is not present then it will just insert it in table
+        session.remove(s4); // If data is present, it will delete it otherwise it will give an error
+        transaction.commit();
+
+        session.close();
+        sf.close();
+    }
+
+    public void alterTabName_colName()
+    {
+
+        //We can change table name where we have specified @Entity
+        //Similarly we can change column names
+        //Go to alien.java file to see
+        Alien a1 = new Alien();
+        a1.setAid(111);
+        a1.setAname("Atharv");
+        a1.setTech("Java");
+
+        //Create session
+        Configuration cfg = new Configuration();
+        cfg.addAnnotatedClass(org.example.Alien.class);
+        cfg.configure();
+        SessionFactory sf = cfg.buildSessionFactory();
+        Session session = sf.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.persist(a1);
         transaction.commit();
 
         session.close();
@@ -100,9 +126,11 @@ public class Main {
     }
     public static void main(String[] args) {
         Main ob = new Main();
-      ob.insert();
+//        ob.insert();
 //        ob.fetch();
 //        ob.update();
 //        ob.delete();
+
+        ob.alterTabName_colName();
     }
 }
